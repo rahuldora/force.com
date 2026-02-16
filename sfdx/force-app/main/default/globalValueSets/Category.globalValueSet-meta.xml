@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Paycheck</fullName>
+        <default>false</default>
+        <label>Paycheck</label>
+    </customValue>
+    <customValue>
+        <fullName>Bonus</fullName>
+        <default>false</default>
+        <label>Bonus</label>
+    </customValue>
+    <customValue>
+        <fullName>Refund</fullName>
+        <default>false</default>
+        <label>Refund</label>
+    </customValue>
+    <customValue>
+        <fullName>Others</fullName>
+        <default>false</default>
+        <label>Others</label>
+    </customValue>
+    <customValue>
+        <fullName>Capital Gain</fullName>
+        <default>false</default>
+        <label>Capital Gain</label>
+    </customValue>
+    <customValue>
+        <fullName>Interest</fullName>
+        <default>false</default>
+        <label>Interest</label>
+    </customValue>
+    <customValue>
+        <fullName>Cook</fullName>
+        <default>false</default>
+        <label>Cook</label>
+    </customValue>
+    <customValue>
+        <fullName>Maid</fullName>
+        <default>false</default>
+        <label>Maid</label>
+    </customValue>
+    <customValue>
+        <fullName>Credit Card Bill Payment</fullName>
+        <default>false</default>
+        <label>Credit Card Bill Payment</label>
+    </customValue>
+    <customValue>
+        <fullName>Food</fullName>
+        <default>false</default>
+        <label>Food</label>
+    </customValue>
+    <customValue>
+        <fullName>Travel</fullName>
+        <default>false</default>
+        <label>Travel</label>
+    </customValue>
+    <customValue>
+        <fullName>Fuel</fullName>
+        <default>false</default>
+        <label>Fuel</label>
+    </customValue>
+    <customValue>
+        <fullName>Groceries</fullName>
+        <default>false</default>
+        <label>Groceries</label>
+    </customValue>
+    <customValue>
+        <fullName>House Bills</fullName>
+        <default>false</default>
+        <label>House Bills</label>
+    </customValue>
+    <customValue>
+        <fullName>Misc</fullName>
+        <default>false</default>
+        <label>Misc</label>
+    </customValue>
+    <customValue>
+        <fullName>Internet Bill</fullName>
+        <default>false</default>
+        <label>Internet Bill</label>
+    </customValue>
+    <customValue>
+        <fullName>Gift</fullName>
+        <default>false</default>
+        <label>Gift</label>
+    </customValue>
+    <customValue>
+        <fullName>Medical Bill</fullName>
+        <default>false</default>
+        <label>Medical Bill</label>
+    </customValue>
+    <customValue>
+        <fullName>Loan</fullName>
+        <default>false</default>
+        <label>Loan</label>
+    </customValue>
+    <customValue>
+        <fullName>Savings</fullName>
+        <default>false</default>
+        <label>Savings</label>
+    </customValue>
+    <description>Picklist values for the category</description>
+    <masterLabel>Category</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
