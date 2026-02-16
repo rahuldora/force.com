@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cook__c</fullName>
+    <label>Cook</label>
+    <summarizedField>Financial_Transaction__c.Amount__c</summarizedField>
+    <summaryFilterItems>
+        <field>Financial_Transaction__c.Category__c</field>
+        <operation>equals</operation>
+        <value>Cook</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Financial_Transaction__c.Monthly_Tracker__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>
