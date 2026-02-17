@@ -54,7 +54,7 @@ public without sharing class BankAccountHandler extends TriggerHandler {
     public override void afterUndelete() {
         
         // need to check whether the existing balance is less than minimum balance
-        for(Bank_Account__c bankAccount : this.oldBankAccounts) {
+        for(Bank_Account__c bankAccount : this.newBankAccounts) {
             if(bankAccount.Balance__c <= bankAccount.Minimum_Balance__c) {
                 // add the affected bank accounts to the list
                 bankAccountsToBeNotified.add(bankAccount);        
