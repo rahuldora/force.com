@@ -69,25 +69,18 @@ public without sharing class BankAccountHandler extends TriggerHandler {
     public static void createCustomNotifications() {
         
         // Setting up the custom notification
-        CustomNotificationType typeObj = [SELECT Id FROM CustomNotificationType WHERE DeveloperName = 'Minimum_Balance' LIMIT 1];
-        List<User> users = [SELECT Id FROM User WHERE Alias IN ('rdora', 'ssark', 'UUser')];
-        Set<String> userIds = new Set<String>();
-        for(User u : users){
-            userIds.add((String)u.Id);
+        try {
+            CustomAlertClass alertClass = new CustomAlertClass();
+            for(Bank_Account__c bankAccount : bankAccountsToBeNotified) {
+                alertClass.sendNotification('Minimum Balance Alert!', 
+                    'Your '+bankAccount.Bank_Account_Name__c+' account '+bankAccount.Name+' has dropped below the minimum balance required. To take action for the record, click on this notification!', 
+                    bankAccount.Id);
+            }
         }
-        
-        for(Bank_Account__c bankAccount : bankAccountsToBeNotified) {
-            Messaging.CustomNotification notification = new Messaging.CustomNotification();
-            notification.setNotificationTypeId(typeObj.Id);
-            notification.setTitle('Minimum Balance Alert!');
-            notification.setBody('Your '+bankAccount.Bank_Account_Name__c+' account '+bankAccount.Name+' has dropped below the minimum balance required. To take action for the record, click on this notification!');
-            notification.setTargetId(bankAccount.Id);
-            try {
-                notification.send(userIds);
-            }
-            catch (Exception e) {
-                System.debug('Problem sending notification: ' + e.getMessage());
-            }
+        catch(Exception e) {
+            System.debug('Error : '+e.getStackTraceString());
+            System.debug('Error : '+e.getCause());
+            return;
         }
 
     }
