@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>TotalExpense__c</fullName>
     <externalId>false</externalId>
-    <formula>Cook__c + CreditCardBillPayment__c + Food__c + Fuel__c + GiftGiven__c + Groceries__c + HouseBills__c + InternetBill__c + Loan__c + Maid__c + MedicalBill__c + Misc__c + Travel__c</formula>
+    <formula>Cook__c + Food__c + Fuel__c + GiftGiven__c + Groceries__c + HouseBills__c + InternetBill__c + Loan__c + Maid__c + MedicalBill__c + Misc__c + Travel__c</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Total Expense</label>
     <precision>18</precision>
