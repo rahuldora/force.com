@@ -10,7 +10,7 @@ public without sharing class BankAccountHandler extends TriggerHandler {
 
     public BankAccountHandler() {
 
-        this.setMaxLoopCount(1);
+        // this.setMaxLoopCount(1);
         this.newBankAccounts = (List<Bank_Account__c>)Trigger.new;
         this.oldBankAccounts = (List<Bank_Account__c>)Trigger.old;
         this.newBankAccountsMap = (Map<Id, Bank_Account__c>)Trigger.newMap;

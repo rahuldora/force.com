@@ -18,7 +18,7 @@ public with sharing class FinancialTransactionHandler extends TriggerHandler{
     
     public FinancialTransactionHandler() {
         
-        this.setMaxLoopCount(2);
+        // this.setMaxLoopCount(2);
         
         this.newTransactionRecords = (List<Financial_Transaction__c>)Trigger.new;
         this.oldTransactionRecords = (List<Financial_Transaction__c>)Trigger.old;
@@ -129,7 +129,7 @@ public with sharing class FinancialTransactionHandler extends TriggerHandler{
             year = record.Transaction_Date__c.year().toString();
             String key = month+'-'+year;
             if(!this.trackerMap.containsKey(key)) {
-                this.trackersToBeCreated.add(new Monthly_Tracker__c(
+                Monthly_Tracker__c newTracker = new Monthly_Tracker__c(
                     Month__c = month,
                     Year__c = year,
                     Bonus_Projected__c = 0,
@@ -153,8 +153,10 @@ public with sharing class FinancialTransactionHandler extends TriggerHandler{
                     Refund_Projected__c = 0,
                     Savings_Projected__c = 0,
                     Travel_Projected__c = 0
-                ));
+                );
+                this.trackersToBeCreated.add(newTracker);
                 checkFlag = true;
+                this.trackerMap.put(key, newTracker);
             }
         }
         return checkFlag;
