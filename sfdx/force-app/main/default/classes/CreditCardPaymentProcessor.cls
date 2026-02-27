@@ -29,7 +29,7 @@ public without sharing class CreditCardPaymentProcessor implements PaymentProces
         if (card == null) { return; }
         Decimal amt = (txn.Amount__c == null) ? 0 : txn.Amount__c;
         // Preserve previous intended sign: insert -> decrease, else -> increase
-        card.Amount_Utilised__c = card.Amount_Utilised__c + (insertFlag ? -amt : amt);
+        card.Amount_Utilised__c = card.Amount_Utilised__c + (insertFlag ? amt : -amt );
         
     }
 
