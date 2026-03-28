@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "/Users/rasa/Documents/Projects/repo/force.com/sfdx"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "/Users/rasa/Documents/Projects/repo/force.com/sfdx"
+    ],
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "eslint.options": {
+      "overrideConfigFile": "/Users/rasa/Documents/Projects/repo/force.com/sfdx/.eslintrc.json"
+    }
+  }
+}

@@ -1,14 +1,11 @@
 public without sharing class CustomAlertClass {
     
-    private Id typeObj;
     private Set<String> users;
 
     public CustomAlertClass() {
 
-        this.typeObj = [SELECT Id FROM CustomNotificationType WHERE DeveloperName = 'Custom_Alert' LIMIT 1].Id;
-        List<User> userList = [SELECT Id FROM User WHERE Alias IN ('rdora', 'ssark', 'UUser')];
         this.users = new Set<String>();
-        for(User usr : userList){
+        for(User usr : getUserList()){
             this.users.add((String)usr.Id);
         }
         
@@ -18,7 +15,7 @@ public without sharing class CustomAlertClass {
 
         try{
             Messaging.CustomNotification notification = new Messaging.CustomNotification();
-            notification.setNotificationTypeId(this.typeObj);
+            notification.setNotificationTypeId(getCustomNotificationTypeId());
             notification.setTitle(title);
             notification.setBody(message);
             notification.setTargetId(targetRecord);
@@ -34,6 +31,26 @@ public without sharing class CustomAlertClass {
             System.debug('Error : '+e.getStackTraceString());
             return;
         }
+
+    }
+
+    public Id getCustomNotificationTypeId() {
+
+        fflib_QueryFactory qf = new fflib_QueryFactory(CustomNotificationType.SObjectType);
+        qf.selectField(CustomNotificationType.Id)
+        .setCondition('DeveloperName = \'Custom_Alert\'')
+        .setLimit(1);
+        List<CustomNotificationType> results = Database.query(qf.toSOQL());
+        return results[0].Id;
+
+    }
+
+    public List<User> getUserList() {
+
+        fflib_QueryFactory qf = new fflib_QueryFactory(User.SObjectType);
+        qf.selectField(User.Id)
+        .setCondition('Alias IN (\'dor\')');
+        return Database.query(qf.toSOQL());
 
     }
     
