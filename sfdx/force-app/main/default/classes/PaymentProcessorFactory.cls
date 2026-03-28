@@ -7,8 +7,7 @@ public without sharing class PaymentProcessorFactory {
     };
 
     public static PaymentProcessor getProcessor(String paymentMethod) {
-
         return processorMap.get(paymentMethod);
-
     }
+    
 }

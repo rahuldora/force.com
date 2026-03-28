@@ -1,29 +1,28 @@
-public without sharing class BankAccountHandler extends TriggerHandler {
-
-    // trigger variables
-    private List<Bank_Account__c> newBankAccounts;
-    private List<Bank_Account__c> oldBankAccounts;
-    private Map<Id, Bank_Account__c> newBankAccountsMap;
-    private Map<Id, Bank_Account__c> oldBankAccountsMap;
-
+public with sharing class BankAccountHandler extends fflib_SObjectDomain {
+    
     public static Set<Bank_Account__c> bankAccountsToBeNotified;
+    
+    public BankAccountHandler(List<Bank_Account__c> sObjectList) {
 
-    public BankAccountHandler() {
-
-        // this.setMaxLoopCount(1);
-        this.newBankAccounts = (List<Bank_Account__c>)Trigger.new;
-        this.oldBankAccounts = (List<Bank_Account__c>)Trigger.old;
-        this.newBankAccountsMap = (Map<Id, Bank_Account__c>)Trigger.newMap;
-        this.oldBankAccountsMap = (Map<Id, Bank_Account__c>)Trigger.oldMap;
+        // Domain classes are initialised with lists to enforce bulkification throughout
+		super(sObjectList);
         bankAccountsToBeNotified = new Set<Bank_Account__c>();
 
     }
 
+    public class Constructor implements fflib_SObjectDomain.IConstructable {
+
+		public fflib_SObjectDomain construct(List<SObject> sObjectList) {
+			return new BankAccountHandler((List<Bank_Account__c>)sObjectList);
+		}
+
+	}
+
     // afterInsert Logic
-    public override void afterInsert() {
+    public override void onAfterInsert() {
         
         // need to check whether the existing balance is less than minimum balance
-        for(Bank_Account__c bankAccount : this.newBankAccounts) {
+        for(Bank_Account__c bankAccount : (List<Bank_Account__c>)getRecords()) {
             if(bankAccount.Balance__c <= bankAccount.Minimum_Balance__c) {
                 // add the affected bank accounts to the list
                 bankAccountsToBeNotified.add(bankAccount);        
@@ -35,10 +34,12 @@ public without sharing class BankAccountHandler extends TriggerHandler {
     }
     
     // afterUpdate Logic
-    public override void afterUpdate() {
+    public override void onAfterUpdate(Map<Id, SObject> existing) {
         
+        // Map of Old Bank_Account__c records
+        Map<Id, Bank_Account__c> oldBankAccountsMap = (Map<Id, Bank_Account__c>)existing;
         // need to check whether the existing balance is less than minimum balance
-        for(Bank_Account__c bankAccount : this.newBankAccounts) {
+        for(Bank_Account__c bankAccount : (List<Bank_Account__c>)getRecords()) {
             if((bankAccount.Balance__c <= bankAccount.Minimum_Balance__c) && 
             (bankAccount.Balance__c != oldBankAccountsMap.get(bankAccount.Id).Balance__c)) {
                 // add the affected bank accounts to the list
@@ -51,10 +52,10 @@ public without sharing class BankAccountHandler extends TriggerHandler {
     }
     
     // afterUndelete Logic
-    public override void afterUndelete() {
+    public override void onAfterUndelete() {
         
         // need to check whether the existing balance is less than minimum balance
-        for(Bank_Account__c bankAccount : this.newBankAccounts) {
+        for(Bank_Account__c bankAccount : (List<Bank_Account__c>)getRecords()) {
             if(bankAccount.Balance__c <= bankAccount.Minimum_Balance__c) {
                 // add the affected bank accounts to the list
                 bankAccountsToBeNotified.add(bankAccount);        
@@ -64,7 +65,7 @@ public without sharing class BankAccountHandler extends TriggerHandler {
         createCustomNotifications();
         
     }
-    
+
     // method for creating the notifications
     public static void createCustomNotifications() {
         
@@ -72,9 +73,11 @@ public without sharing class BankAccountHandler extends TriggerHandler {
         try {
             CustomAlertClass alertClass = new CustomAlertClass();
             for(Bank_Account__c bankAccount : bankAccountsToBeNotified) {
-                alertClass.sendNotification('Minimum Balance Alert!', 
+                alertClass.sendNotification(
+                    'Minimum Balance Alert!', 
                     'Your '+bankAccount.Bank_Account_Name__c+' account '+bankAccount.Name+' has dropped below the minimum balance required. To take action for the record, click on this notification!', 
-                    bankAccount.Id);
+                    bankAccount.Id
+                );
             }
         }
         catch(Exception e) {
