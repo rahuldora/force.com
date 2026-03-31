@@ -1,0 +1,43 @@
+<template>
+    
+    <lightning-card variant="base">
+        
+        <div slot="title">
+            Amount Transfer
+        </div>
+        
+        <!-- <div slot="actions">   
+        </div> -->
+        
+        <div slot="footer">
+            <lightning-button variant="brand" label="Transfer" onclick={handleTransfer}></lightning-button>
+        </div>
+        
+        <div>
+            <!-- Card Body  -->
+            <lightning-card variant="base">
+                <!-- <div slot="title">
+                    Card Title
+                </div>
+                <div slot="actions">
+                </div>
+                <div slot="footer">
+                </div> -->
+                <div>
+                    <!-- Card Body  -->
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="1"></lightning-layout-item>
+                        <lightning-layout-item size="10">
+                            <lightning-input type="number" label="Amount" name="amount" formatter="currency" step="0.01" value={bankAccountTransfer.amount}  onchange={changeHandler} variant="label-inline"></lightning-input>
+                            <lightning-combobox label="From Bank Account" name="transferFrom" options={bankAccountOptions} value={bankAccountTransfer.transferFrom}  onchange={changeHandler} variant="label-inline"></lightning-combobox> 
+                            <lightning-combobox label="To Bank Account" name="transferTo" options={bankAccountOptions} value={bankAccountTransfer.transferTo}  onchange={changeHandler} variant="label-inline"></lightning-combobox> 
+                        </lightning-layout-item>
+                        <lightning-layout-item size="1"></lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </lightning-card>
+        </div>
+
+    </lightning-card>
+
+</template>
