@@ -1,0 +1,74 @@
+<template>
+
+    <lightning-card icon-name="utility:inspector_panelq" variant="base">
+        <div slot="title">
+            {record.Credit_Card_Name__c}
+        </div>
+        <div slot="actions">
+        
+        </div>
+        <div slot="footer">
+            
+                <lightning-button variant="brand" label="Update" onclick={handleUpdate}></lightning-button>
+                &nbsp;
+                <lightning-button variant="brand" label="Cancel" onclick={handleCancel}></lightning-button>
+            
+        </div>
+        <div>
+            <!-- Card Body  -->
+            <!-- for Card Name -->
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="3"></lightning-layout-item>
+                <lightning-layout-item size="2">
+                    Card Name
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
+                <lightning-layout-item size="5">
+                    <lightning-input type="text" label="Name" name="Credit_Card_Name__c" value={record.Credit_Card_Name__c} required variant="label-hidden" onchange={changeHandler}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="2"></lightning-layout-item>
+            </lightning-layout>
+
+            <!-- for Amount Utilised -->
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="3"></lightning-layout-item>
+                <lightning-layout-item size="2">
+                    Amount Utilised
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
+                <lightning-layout-item size="5">
+                    <lightning-input type="number" label="Balance" name="Amount_Utilised__c" formatter="currency" step="0.01" value={record.Amount_Utilised__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="2"></lightning-layout-item>
+            </lightning-layout>
+
+            <!-- for Available Limit -->
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="3"></lightning-layout-item>
+                <lightning-layout-item size="2">
+                    Available Limit
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
+                <lightning-layout-item size="5">
+                    <lightning-input type="number" label="Available Limit" name="Available_Limit__c" formatter="currency" step="0.01" value={record.Available_Limit__c} required variant="label-hidden"  onchange={changeHandler} disabled="true"></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="2"></lightning-layout-item>
+            </lightning-layout>
+
+            <!-- for Total Limit -->
+            <lightning-layout multiple-rows>
+                <lightning-layout-item size="3"></lightning-layout-item>
+                <lightning-layout-item size="2">
+                    Total Limit
+                </lightning-layout-item>
+                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
+                <lightning-layout-item size="5">
+                    <lightning-input type="number" label="Total Limit" name="Total_Limit__c" formatter="currency" step="0.01" value={record.Total_Limit__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="2"></lightning-layout-item>
+            </lightning-layout>
+
+        </div>
+    </lightning-card>
+
+</template>
