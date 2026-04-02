@@ -40,10 +40,9 @@ export default class EditBankAccountModal extends LightningModal {
 
     loadRecord() {
         fetchBankAccountById({ recordId: this.recordId})
-        .then(result => {
-            if(result) {
-                this.record = result;
-                console.log(JSON.stringify(this.record));
+        .then(results => {
+            if(results) {
+                this.record = results;
             }
         })
         .catch(error => {

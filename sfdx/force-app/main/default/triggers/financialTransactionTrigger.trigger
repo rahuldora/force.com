@@ -6,5 +6,5 @@ trigger financialTransactionTrigger on Financial_Transaction__c (
     after delete,
     after undelete
 ) {
-    fflib_SObjectDomain.triggerHandler(Financial_Transaction__c.class);
+    fflib_SObjectDomain.triggerHandler(FinancialTransactionHandler.class);
 }

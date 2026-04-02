@@ -95,7 +95,7 @@ export default class CreditCardsPage extends LightningElement {
         const row = event.detail.row;
         const result = await EditCreditCardModal.open({
             label: 'Edit Credit Card',
-            size: 'small',
+            size: 'medium',
             recordId: row.Id
         });
         this.isLoading = true;

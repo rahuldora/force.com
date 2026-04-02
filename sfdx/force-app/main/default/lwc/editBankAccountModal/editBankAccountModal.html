@@ -1,4 +1,5 @@
 <template>
+
     <lightning-card icon-name="utility:co_insurance" variant="base">
         <div slot="title">
             {record.Name}
@@ -15,71 +16,62 @@
         </div>
         <div>
             <!-- Card Body  -->
-            <!-- for Name -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
                     Name
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
-                    <lightning-input type="text" label="Name" name="name" value={record.Name} required variant="label-hidden" disabled="true"></lightning-input>
+                    <lightning-input type="text" label="Name" name="name" value={record.Name} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Bank Account Name -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
                     Bank Name
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
-                    <lightning-input type="text" label="Name" name="Bank_Account_Name__c" value={record.Bank_Account_Name__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
+                    <lightning-input type="text" label="Name" name="name" value={record.Bank_Account_Name__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Account Type -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
                     Account Type
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
-                    <lightning-combobox label="Account Type" name="Account_Type__c" options={accountTypes} variant="label-hidden" value={record.Account_Type__c}  onchange={changeHandler}></lightning-combobox>    
+                    <lightning-combobox label="Account Type" name="accountType" options={accountTypes} variant="label-hidden" value={record.Account_Type__c}  onchange={changeHandler}></lightning-combobox>    
                 </lightning-layout-item>
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Balance -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
                     Balance
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
-                    <lightning-input type="number" label="Balance" name="Balance__c" formatter="currency" step="0.01" value={record.Balance__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
+                    <lightning-input type="number" label="Balance" name="balance" formatter="currency" step="0.01" value={record.Balance__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Minimum Balance -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
                     Minimum Balance
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
-                    <lightning-input type="number" label="Minimum Balance" name="Minimum_Balance__c" formatter="currency" step="0.01" value={record.Minimum_Balance__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
+                    <lightning-input type="number" label="Minimum Balance" name="minimumBalance" formatter="currency" step="0.01" value={record.Minimum_Balance__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
         </div>
     </lightning-card>
+    
 </template>

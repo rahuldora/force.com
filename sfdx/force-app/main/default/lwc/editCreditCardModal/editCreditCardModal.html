@@ -1,12 +1,11 @@
 <template>
 
-    <lightning-card icon-name="utility:inspector_panelq" variant="base">
+    <lightning-card icon-name="utility:location_permit" variant="base">
         <div slot="title">
             {record.Credit_Card_Name__c}
         </div>
-        <div slot="actions">
-        
-        </div>
+        <!-- <div slot="actions">
+        </div> -->
         <div slot="footer">
             
                 <lightning-button variant="brand" label="Update" onclick={handleUpdate}></lightning-button>
@@ -16,7 +15,6 @@
         </div>
         <div>
             <!-- Card Body  -->
-            <!-- for Card Name -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
@@ -28,7 +26,6 @@
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Amount Utilised -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
@@ -40,7 +37,6 @@
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Available Limit -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">
@@ -52,7 +48,6 @@
                 <lightning-layout-item size="2"></lightning-layout-item>
             </lightning-layout>
 
-            <!-- for Total Limit -->
             <lightning-layout multiple-rows>
                 <lightning-layout-item size="3"></lightning-layout-item>
                 <lightning-layout-item size="2">

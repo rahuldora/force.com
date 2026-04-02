@@ -8,7 +8,6 @@
             <lightning-button variant="brand" label="Transfer Amount" onclick={handleTransfer}></lightning-button>
         </div>
         <!-- <div slot="footer">
-        
         </div> -->
         <div>
             <!-- Card Body  -->
@@ -16,15 +15,11 @@
                 <lightning-spinner alternative-text="Bank Account records are being fetched. Please wait for sometime!"></lightning-spinner>
             </template>
             <template if:false={isLoading}>
-                <lightning-datatable 
-                    key-field="id" 
-                    data={data} 
-                    columns={columns} 
-                    onrowaction={handleRowAction}
-                ></lightning-datatable>
+                <lightning-datatable key-field="id" data={data} columns={columns} onrowaction={handleRowAction}></lightning-datatable>
             </template>
             
         </div>
     </lightning-card>
     
+
 </template>

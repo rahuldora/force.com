@@ -93,8 +93,6 @@ export default class BankAccountsPage extends LightningElement {
             size: 'medium',
             recordId: row.Id
         });
-        this.isLoading = true;
-        this.getRecords();
     }
 
     // Handle Transfer
@@ -106,25 +104,5 @@ export default class BankAccountsPage extends LightningElement {
         this.isLoading = true;
         this.getRecords();
     }
-
-    // // Display Success Toast
-    // showSuccessToast() {
-    //     const evt = new ShowToastEvent({
-    //         title: 'Success',
-    //         message: 'Amount transferred successfully',
-    //         variant: 'success'
-    //     });
-    //     this.dispatchEvent(evt);
-    // }
-
-    // // Display Error Toast
-    // showErrorToast() {
-    //     const evt = new ShowToastEvent({
-    //         title: 'Error',
-    //         message: 'Amount transfer Unsuccessful!',
-    //         variant: 'error'
-    //     });
-    //     this.dispatchEvent(evt);
-    // }
 
 }

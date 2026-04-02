@@ -28,11 +28,10 @@ export default class EditCreditCardModal extends LightningModal {
             this.record = {};
         });
     }
-    
+
     changeHandler(event) {
         const fieldName = event.target.name;
         this.record[fieldName] = event.target.value;
-        console.log(JSON.stringify(this.record));
     }
 
     handleUpdate() {
