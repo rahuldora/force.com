@@ -1,0 +1,95 @@
+<template>
+    <lightning-card variant="base">
+        <!-- <div slot="title">
+        </div> -->
+        <div slot="actions">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <lightning-combobox name="month" label="Month" value={planner.month} options={monthOptions} onchange={handleAction} variant="label-hidden"></lightning-combobox>    
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
+                        <th>
+                            <lightning-combobox name="year" label="Year" value={planner.year} options={yearOptions} onchange={handleAction} variant="label-hidden"></lightning-combobox>    
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
+                        <th>
+                            <lightning-button icon-name="standard:apex" alternative-text="Update" title="Update" type="button" variant="brand" label="Update" onclick={clickHandler}></lightning-button>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- <div slot="footer">
+        </div> -->
+        <div>
+            <!-- Card Body  -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="large" variant="base"></lightning-spinner>
+            </template>
+            <lightning-layout>
+
+                <template for:each={dataMap} for:item="categoryMap">
+                    
+                    <lightning-layout-item size="4" key={categoryMap.txnType}>
+                        
+                        <div>
+                            
+                            <lightning-card variant="base" icon-name={categoryMap.iconValue}>
+                            
+                                <div slot="title">
+                                    {categoryMap.txnType} Forecast
+                                </div>
+                            
+                                <div slot="actions">
+                                </div>
+                            
+                                <div>
+                                    <!-- Card Body  -->
+                                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th scope="col"><div class="slds-truncate">Category</div></th>
+                                                <th scope="col"><div class="slds-truncate">Projected</div></th>
+                                                <th scope="col"><div class="slds-truncate">Actual</div></th>
+                                                <th scope="col"><div class="slds-truncate">Surplus/Deficit</div></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template for:each={categoryMap.values} for:item="category">
+                                                <tr key={category.label}>
+                                                    <td>
+                                                        <label class="field-label">{category.label}</label>
+                                                    </td>
+                                                    <td>
+                                                        <lightning-input name={category.actualLabel} type="number" formatter="currency" step="0.01" value={category.projected} variant="label-hidden" onchange={changeHandler}></lightning-input>
+                                                    </td>
+                                                    <td>
+                                                        <lightning-formatted-number value={category.actual} format-style="currency" currency-code="INR" class="slds-text-align_right currencyBox"></lightning-formatted-number>
+                                                    </td>
+                                                    <td>
+                                                        <lightning-formatted-number value={category.diff} format-style="currency" currency-code="INR" class="slds-text-align_right currencyBox"  style={category.diffStyle}></lightning-formatted-number>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </lightning-card>
+
+                        </div>
+
+                    </lightning-layout-item>
+                    
+                </template>
+
+            </lightning-layout> 
+        </div>
+    </lightning-card>
+</template>
