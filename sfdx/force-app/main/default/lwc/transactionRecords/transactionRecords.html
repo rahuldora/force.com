@@ -1,0 +1,32 @@
+<template>
+
+    <lightning-card variant="base">
+        <!-- <div slot="title">
+            Card Title
+        </div>
+        <div slot="actions">
+        
+        </div>
+        <div slot="footer">
+        
+        </div> -->
+        <div>
+            <!-- Card Body  -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Transaction records are being fetched. Please wait for sometime!"></lightning-spinner>
+            </template>
+
+            <template if:false={isLoading}>
+                <lightning-datatable key-field="id" columns={columns} data={visibleData} onrowaction={handleRowAction}></lightning-datatable>
+                <div class="slds-m-top_medium slds-align_absolute-center">
+                    <lightning-button label="Previous" onclick={handlePrevious} disabled={disablePrevious}></lightning-button>
+                    <span class="slds-m-horizontal_small">
+                        Page {pageNo} of {totalPages}
+                    </span>
+                    <lightning-button label="Next" onclick={handleNext} disabled={disableNext}></lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+
+</template>

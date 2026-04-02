@@ -93,7 +93,6 @@ export default class CreditCardsPage extends LightningElement {
     // Row action Handler
     async handleRowAction(event) {
         const row = event.detail.row;
-        console.log(JSON.stringify(row));
         const result = await EditCreditCardModal.open({
             label: 'Edit Credit Card',
             size: 'small',

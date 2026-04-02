@@ -22,7 +22,6 @@
                 <lightning-layout-item size="2">
                     Card Name
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
                     <lightning-input type="text" label="Name" name="Credit_Card_Name__c" value={record.Credit_Card_Name__c} required variant="label-hidden" onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>
@@ -35,7 +34,6 @@
                 <lightning-layout-item size="2">
                     Amount Utilised
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
                     <lightning-input type="number" label="Balance" name="Amount_Utilised__c" formatter="currency" step="0.01" value={record.Amount_Utilised__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>
@@ -48,7 +46,6 @@
                 <lightning-layout-item size="2">
                     Available Limit
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
                     <lightning-input type="number" label="Available Limit" name="Available_Limit__c" formatter="currency" step="0.01" value={record.Available_Limit__c} required variant="label-hidden"  onchange={changeHandler} disabled="true"></lightning-input>
                 </lightning-layout-item>
@@ -61,7 +58,6 @@
                 <lightning-layout-item size="2">
                     Total Limit
                 </lightning-layout-item>
-                <!-- <lightning-layout-item size="1"></lightning-layout-item> -->
                 <lightning-layout-item size="5">
                     <lightning-input type="number" label="Total Limit" name="Total_Limit__c" formatter="currency" step="0.01" value={record.Total_Limit__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
                 </lightning-layout-item>

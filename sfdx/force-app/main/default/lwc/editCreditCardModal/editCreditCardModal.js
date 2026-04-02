@@ -3,14 +3,6 @@ import LightningModal from 'lightning/modal';
 import fetchCreditCardById from '@salesforce/apex/CreditCardsPageController.fetchCreditCardById';
 import updateCreditCard from '@salesforce/apex/CreditCardsPageController.updateCreditCard';
 
-const FIELDS = [
-    "Credit_Card__c.Id", 
-    "Credit_Card__c.Credit_Card_Name__c", 
-    "Credit_Card__c.Amount_Utilised__c", 
-    "Credit_Card__c.Available_Limit__c", 
-    "Credit_Card__c.Total_Limit__c"
-];
-
 export default class EditCreditCardModal extends LightningModal {
     @api recordId;
     @track record = {};

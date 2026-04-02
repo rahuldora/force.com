@@ -1,0 +1,44 @@
+<template>
+
+    <lightning-card variant="base">
+        <div slot="title">
+            Financial Transactions
+        </div>
+        <div slot="actions">
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <lightning-combobox name="month" value={planner.month} options={monthOptions} onchange={handleAction}></lightning-combobox>
+                        </th>
+                        <th>
+                            &nbsp;
+                        </th>
+                        <th>
+                            <lightning-combobox name="year" value={planner.year} options={yearOptions} onchange={handleAction}></lightning-combobox>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- <div slot="footer">
+        </div> -->
+        <div>
+            <!-- Card Body  -->
+            <lightning-tabset variant="scoped">
+                
+                <lightning-tab label="Income">
+                    <c-transaction-records txn-type="Income" month={planner.month} year={planner.year}></c-transaction-records>
+                </lightning-tab>
+                <lightning-tab label="Expense">
+                    <c-transaction-records txn-type="Expense" month={planner.month} year={planner.year}></c-transaction-records>
+                </lightning-tab>
+                <lightning-tab label="Savings">
+                    <c-transaction-records txn-type="Savings" month={planner.month} year={planner.year}></c-transaction-records>
+                </lightning-tab>
+                
+            </lightning-tabset>
+        </div>
+    </lightning-card>
+    
+</template>
