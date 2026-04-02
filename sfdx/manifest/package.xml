@@ -18,6 +18,9 @@
         <members>FinancialTransactionSelector</members>
         <members>FinancialTransactionService</members>
         <members>FinancialTransactionsPageController</members>
+        <members>MonthlyTrackerSelector</members>
+        <members>MonthlyTrackerService</members>
+        <members>MonthlyTrackersPageController</members>
         <members>OnlinePaymentProcessor</members>
         <members>PaymentProcessor</members>
         <members>PaymentProcessorFactory</members>
