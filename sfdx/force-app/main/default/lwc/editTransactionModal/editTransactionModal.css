@@ -1,0 +1,43 @@
+.container {
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.header {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #16325c;
+}
+
+/* Grid layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+}
+
+/* Make description wider */
+.grid lightning-input[name="Description__c"] {
+    grid-column: span 2;
+}
+
+/* Full width on smaller screens */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

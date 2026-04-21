@@ -19,7 +19,5 @@ public with sharing class FinancialTransactionsPageController {
     public static String getPaymentMethodDependentOptions(){
         return FinancialTransactionService.getPaymentMethodDependentOptions();
     }
-
-
-
+    
 }

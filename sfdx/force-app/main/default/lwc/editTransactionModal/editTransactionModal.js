@@ -1,35 +1,50 @@
 import { api, track, wire } from 'lwc';
+
 import LightningModal from 'lightning/modal';
-import { getRecord, updateRecord, createRecord } from 'lightning/uiRecordApi';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
+import { getRecord, getFieldValue, updateRecord } from 'lightning/uiRecordApi';
 
 import TXN_OBJECT from '@salesforce/schema/Financial_Transaction__c';
-// import PAYMENT_METHOD_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Method__c';
+import AMOUNT_FIELD from '@salesforce/schema/Financial_Transaction__c.Amount__c';
 import CATEGORY_FIELD from '@salesforce/schema/Financial_Transaction__c.Category__c';
+import DESCRIPTION_FIELD from '@salesforce/schema/Financial_Transaction__c.Description__c';
+import PAYMENT_INSTRUMENT_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Instrument__c';
+import PAYMENT_INSTRUMENT_DETAIL_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Instrument_Detail__c';
+import PAYMENT_METHOD_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Method__c';
+import TRANSACTION_DATE_FIELD from '@salesforce/schema/Financial_Transaction__c.Transaction_Date__c';
+import TRANSACTION_TYPE_FIELD from '@salesforce/schema/Financial_Transaction__c.Transaction_Type__c';
 
-import getTxnRecordById from '@salesforce/apex/FinancialTransactionsPageController.getTxnRecordById';
-import updateTransaction from '@salesforce/apex/FinancialTransactionsPageController.updateTransaction';
 import getPaymentMethodDependentOptions from '@salesforce/apex/FinancialTransactionsPageController.getPaymentMethodDependentOptions';
 
 export default class EditTransactionModal extends LightningModal {
 
     @api recordId;
-    @api mode;
-
     @track record = {};
-    
+
+    // Flag variable to display the spinner when required
+    isLoading = true;
+
     txnRecordTypeId;
-    categoryMap;
-    dependentPicklistMap;
-    
+
+    // Map variables to store the dependent picklist values
+    categoryMap = {}; // Category => dependent on => Transaction Type
+    paymentInstrumentMap = {}; // Payment Instrument => dependent on => Payment Method
+    paymentInstrumentDetailMap = {}; // Payment Instrument Detail => dependent on => Payment Instrument
+
+    // Option Variables
     txnTypeOptions = [];
-    @track categoryOptions = [];
     paymentMethodOptions = [];
+    @track categoryOptions = [];
     @track paymentInstrumentOptions = []
     @track paymentInstrumentDetailOptions = [];
 
-    isLoading;
+    // Flag variables to detect whether all the component values are loaded
+    isObjectLoaded = false;
+    isCategoryPicklistLoaded = false;
+    isPaymentPicklistLoaded = false;
+    isRecordLoaded = false;
 
+    /******************************************* Wire Methods - Start *******************************************/
     // wire method to fetch the default recordType Id of Financial_Transaction__c
     @wire(getObjectInfo, { 
         objectApiName: TXN_OBJECT
@@ -37,6 +52,8 @@ export default class EditTransactionModal extends LightningModal {
     results({ error, data }) {
         if(data) {
             this.txnRecordTypeId = data.defaultRecordTypeId;
+            this.isObjectLoaded = true;
+            this.initializeUI();
         }
         else if (error) {
             console.error('Error occured while fetching the RecordType ::', JSON.stringify(error));
@@ -50,247 +67,246 @@ export default class EditTransactionModal extends LightningModal {
     })
     categoryPickListInfo({ data, error }) {
         if(data) {
-            this.prepareCategorymap(data);
-            this.prepareCategoryOptions();
+            this.txnTypeOptions = this.prepareTxnTypeOptions(data.controllerValues);
+            this.categoryMap = this.prepareCategoryMap(data);
+            this.isCategoryPicklistLoaded = true;
+            this.initializeUI();
         }
         else if(error) {
             console.error('Error occurred while fetching Category Picklist::', JSON.stringify(error));
         }
     }
-
-    // helper method to prepare the categoryMap for generating the dependent picklist value based on the txnType
-    prepareCategorymap(data) {
-        const controllerMap = data.controllerValues;
-        const values = data.values;
-        // Reverse map => index => txnType
-        const indexToTypeMap = {};
-        Object.keys(controllerMap).forEach(key => {
-            indexToTypeMap[controllerMap[key]] = key;
-        });
-        // Initialize result map
-        const result = {};
-        // Loop through dependent values
-        values.forEach(item => {
-            item.validFor.forEach(index => {
-                const txnType = indexToTypeMap[index];
-                if (!result[txnType]) {
-                    result[txnType] = [];
-                }
-                result[txnType].push(item.value);
-            });
-        });
-        // Convert to required structure
-        this.categoryMap = Object.keys(result).map(key => {
-            return {
-                txnType: key,
-                values: result[key]
-            };
-        });
-        // to prepare the txnType options
-        this.prepareTxnTypeOptions(controllerMap);
-    }
     
-    // helper method to create the txnTypeOptions
-    prepareTxnTypeOptions(controllerValues) {
-        this.txnTypeOptions = [];
-        Object.keys(controllerValues).forEach(key => {
-            let val = {
-                label : key,
-                value : key
-            }
-            this.txnTypeOptions.push(val);
-        });
-    }
-
-    // helper method to create the categoryOptions
-    prepareCategoryOptions() {
-        if(this.record.Id === undefined) {
-            return;
-        }
-        this.categoryOptions = [];
-        this.categoryMap.forEach(element => {
-            if(element.txnType === this.record.Transaction_Type__c) {
-                element.values.forEach(val => {
-                    let optionValue = {
-                        label : val,
-                        value : val
-                    };
-                    this.categoryOptions.push(optionValue);
-                })
-            }
-        });
-    }
-    
-    // wire method to fetch the picklist values for payment method
-    // @wire(getPicklistValues, { 
-    //     recordTypeId: '$txnRecordTypeId', 
-    //     fieldApiName: PAYMENT_METHOD_FIELD
-    // })
-    // paymentMethodPickListInfo({ data, error }) {
-    //     if(data) {
-    //         this.preparePaymentMethodOptions(data);
-    //     }
-    //     else if(error) {
-    //         console.error('Error occurred while fetching Payment Method Picklist::', JSON.stringify(error));
-    //     }
-    // }
-
-    
-    // Wire method to fetch the Payment Method => Payment Instrument => Payment Instrument Detail picklist
+    // wire method to fetch the dependent picklist values along with their controlling fields
     @wire(getPaymentMethodDependentOptions)
-    fetchDependentPicklistMap({ data, error }) {
+    paymentMethodDependentOptionsInfo({ data, error }) {
         if(data) {
-            this.dependentPicklistMap = JSON.parse(data).records;
-            this.preparePaymentMethodOptions();
-            this.preparePaymentInstrumentOptions();
-            this.preparePaymentInstrumentDetailOptions();
+            let parsedData = JSON.parse(data);
+            this.paymentMethodOptions = this.preparePaymentMethodOptions(parsedData.records);
+            this.paymentInstrumentMap = this.preparePaymentInstrumentMap(parsedData.records);
+            this.paymentInstrumentDetailMap = this.preparePaymentInstrumentDetailMap(parsedData.records);
+            this.isPaymentPicklistLoaded = true;
+            this.initializeUI();
         }
         else if(error) {
-            console.error('Error occurred while fetching Dependent Picklist Map::', JSON.stringify(error));
+            console.error('Error occurred while fetching Dependent Picklist::', JSON.stringify(error));
         }
     }
     
-    // helper method to create the paymentMethodOptions
-    preparePaymentMethodOptions() {
-        this.paymentMethodOptions = this.dependentPicklistMap.map(item => ({
-            label: item.paymentMethod,
-            value: item.paymentMethod
-        }));
-    }
-
-    preparePaymentInstrumentOptions() {
-        this.paymentInstrumentOptions = [];
-        if(this.record.Id === undefined) {
-            return;
+    // wire method to fetch the record data
+    @wire(getRecord, {
+        recordId: '$recordId',
+        fields: [
+            AMOUNT_FIELD, 
+            CATEGORY_FIELD,
+            DESCRIPTION_FIELD,
+            PAYMENT_INSTRUMENT_FIELD,
+            PAYMENT_INSTRUMENT_DETAIL_FIELD,
+            PAYMENT_METHOD_FIELD,
+            TRANSACTION_DATE_FIELD,
+            TRANSACTION_TYPE_FIELD
+        ]
+    })
+    recordData({ data, error }) {
+        if (!this.recordId) return;
+        if(data) {
+            this.record = {
+                'Id' : data.id,
+                'Amount__c' : getFieldValue(data,AMOUNT_FIELD), 
+                'Category__c' : getFieldValue(data, CATEGORY_FIELD),
+                'Description__c' : getFieldValue(data, DESCRIPTION_FIELD),
+                'Payment_Instrument__c' : getFieldValue(data, PAYMENT_INSTRUMENT_FIELD),
+                'Payment_Instrument_Detail__c' : getFieldValue(data, PAYMENT_INSTRUMENT_DETAIL_FIELD),
+                'Payment_Method__c' : getFieldValue(data, PAYMENT_METHOD_FIELD),
+                'Transaction_Date__c' : getFieldValue(data, TRANSACTION_DATE_FIELD),
+                'Transaction_Type__c' : getFieldValue(data, TRANSACTION_TYPE_FIELD)
+            };
+            this.isRecordLoaded = true;
+            this.initializeUI();
         }
-        let selectedPaymentMethod = this.record.Payment_Method__c;
-        const methodObj = this.dependentPicklistMap?.find(
-            item => item.paymentMethod === selectedPaymentMethod
-        );
-        if(!methodObj) return;
-
-        this.paymentInstrumentOptions = methodObj.paymentInstrument.map(pi => ({
-            label: pi.paymentInstrument,
-            value: pi.paymentInstrument
-        }));
-    }
-
-    preparePaymentInstrumentDetailOptions() {
-        this.paymentInstrumentDetailOptions = [];
-        if(this.record.Id === undefined) {
-            return;
+        else if(error) {
+            console.error('Error occurred while fetching Category Picklist::', JSON.stringify(error));
         }
-
-        let selectedPaymentMethod = this.record.Payment_Method__c;
-        const methodObj = this.dependentPicklistMap?.find(
-            item => item.paymentMethod === selectedPaymentMethod
-        );
-        if(!methodObj) return;
-        
-        let selectedPaymentInstrument = this.record.Payment_Instrument__c;
-        const instrumentObj = methodObj.paymentInstrument?.find(
-            pi => pi.paymentInstrument === selectedPaymentInstrument
-        );
-        if(!instrumentObj) return;
-
-        this.paymentInstrumentDetailOptions = instrumentObj.paymentInstrumentDetail.map(detail => (
-            {
-                label: detail,
-                value: detail
-            }
-        ));
     }
+    /******************************************* Wire Methods - End *******************************************/
 
-    // helper method to create the Payment Instrument options
-    // preparepaymentInstrumentOptions() {
-    //     if(this.record.Id === undefined) {
-    //         return;
-    //     }
-    //     this.categoryOptions = [];
-    //     this.categoryMap.forEach(element => {
-    //         if(element.txnType === this.record.Transaction_Type__c) {
-    //             element.values.forEach(val => {
-    //                 let optionValue = {
-    //                     label : val,
-    //                     value : val
-    //                 };
-    //                 this.categoryOptions.push(optionValue);
-    //             })
-    //         }
-    //     });
-    // }
-    
     constructor() {
         super();
     }
-    
-    connectedCallback(){
-        this.isLoading = true;
-        this.loadRecord();
+
+    // connectedCallback() {
+    //     try {
+    //         this.initializeUI();
+    //     } 
+    //     catch (error) {
+    //         console.error('Initialization error:', error);
+    //     }
+    // }
+
+    // Method to initialise the UI after all the components are loaded / fetched
+    initializeUI() {
+        if(
+            !this.isObjectLoaded || 
+            !this.isCategoryPicklistLoaded ||
+            !this.isPaymentPicklistLoaded ||
+            !this.isRecordLoaded
+        ) {
+            return;
+        }
+        // set the category picklist based on the txnType
+        this.categoryOptions = [];
+        this.categoryOptions = this.prepareCategoryOptions(this.record.Transaction_Type__c);
+        // set the payment instrument picklist based on the paymentMethod
+        this.paymentInstrumentOptions = [];
+        this.paymentInstrumentOptions = this.preparePaymentInstrumentOptions(this.record.Payment_Method__c);
+        // set the catergory picklist based on the txnType
+        this.paymentInstrumentDetailOptions = [];
+        this.paymentInstrumentDetailOptions = this.preparePaymentInstrumentDetailOptions(this.record.Payment_Instrument__c);
+        this.isLoading = false;
     }
     
-    // helper method to load the record data
-    loadRecord() {
-        getTxnRecordById({ 
-            recordId: this.recordId 
-        })
-        .then(result => {
-            if(result) {
-                this.record = result;
-                // Rebuild EVERYTHING after record loads
-                this.prepareCategoryOptions();
-                if(this.dependentPicklistMap) {
-                    this.preparePaymentMethodOptions();
-                    this.preparePaymentInstrumentOptions();
-                    this.preparePaymentInstrumentDetailOptions();
-                }
-                this.isLoading = false;
-            }
-        })
-        .catch(error => {
-            console.error(error.stack);     
-            this.record = {};
-            this.isLoading = false;
-        });
-    }
-    
-    // handler method to handle the value change
-    changeHandler(event) {
+    /******************************************* Handler Methods - Start *******************************************/
+    // change handler method to capture the changes in the field
+    handleChange(event) {
         const fieldName = event.target.name;
         this.record[fieldName] = event.target.value;
-        if(fieldName === 'Transaction_Type__c') {
-            this.prepareCategoryOptions();
+
+        // Clear dependent fields when controlling field changes
+        if (fieldName === 'Transaction_Type__c') {
+            this.record['Category__c'] = null;
         }
-        else if(fieldName === 'Payment_Method__c') {
-            this.preparePaymentInstrumentOptions();
-            this.preparePaymentInstrumentDetailOptions();
+        else if (fieldName === 'Payment_Method__c') {
+            this.record['Payment_Instrument__c'] = null;
+            this.record['Payment_Instrument_Detail__c'] = null;
         }
-        else if(fieldName === 'Payment_Instrument__c') {
-            this.preparePaymentInstrumentDetailOptions();
+        else if (fieldName === 'Payment_Instrument__c') {
+            this.record['Payment_Instrument_Detail__c'] = null;
         }
+        this.initializeUI();
+    }   
+    
+    // click handler method to process the data upon button click
+    handleClick(event) {
+        const operation = event.target.name;
+        if(operation === 'cancel') {
+            this.close();
+        }
+        if(operation === 'update'){
+            this.isLoading = true;
+            const fields = {};
+            Object.keys(this.record).forEach(key => {
+                fields[key] = this.record[key];
+            });
+            const recordInput = { fields };
+            updateRecord(recordInput)
+            .then(() => {
+                this.isLoading = false;
+                this.close('success');
+            })
+            .catch(error => {
+                this.isLoading = false;
+                this.close('error');
+            });
+        }
+    }
+    /******************************************* Handler Methods - End *******************************************/ 
+
+    /******************************************* Helper Methods - Start *******************************************/     
+    // Helper method to prepare the txnTypeOption
+    prepareTxnTypeOptions(data) {
+        return Object.keys(data).map(key => {
+            return {
+                label: key,
+                value: key
+            }
+        })
     }
     
-    // handler method to update the record value
-    handleUpdate() {
-        this.isLoading = true;
-        updateTransaction({
-            txn : this.record
-        })
-        .then(result => {
-            alert('Transaction record updation was ' + result + '!!!');
-            this.isLoading = false;
-            this.close();
-        })
-        .catch(error => {
-            alert('Transaction record updation was Unsuccesful!!!');
-            this.isLoading = false;
-            this.close();
-        })
+    // Helper method to prepare the categoryMap
+    prepareCategoryMap(data) {
+        let result = {};
+        const controllerValues = data.controllerValues;
+        const values = data.values;
+
+        // prepare the Index to Value map
+        let indexToTxnMap = {};
+        Object.keys(controllerValues).forEach(key => {
+            let index = controllerValues[key];
+            indexToTxnMap[index] = key;
+        });
+
+        // Iterate through the dependent values for mapping
+        values.forEach(item => {
+            item.validFor.forEach(element => {
+                let txnType = indexToTxnMap[element];
+                if(!result[txnType]) {
+                    result[txnType] = [];
+                }
+                result[txnType].push({
+                    label: item.label,
+                    value: item.label
+                });
+            });
+        });
+        return result;
     }
-    
-    // handler method to close the modal
-    handleCancel() {
-        this.close();
+
+    // Helper method to prepare the Category options
+    prepareCategoryOptions(txnType) {
+        return this.categoryMap[txnType] || []; 
     }
+
+    // Helper to prepare the Payment Method options
+    preparePaymentMethodOptions(data) {
+        return data.map(item => {
+            return {
+                label: item.paymentMethod,
+                value: item.paymentMethod
+            }
+        });
+    }
+
+    // Helper to prepare the Payment Instrument Map
+    preparePaymentInstrumentMap(data) {
+        let result = {};
+        data.forEach(item1 => {
+            result[item1.paymentMethod] = [];
+            item1.paymentInstrument.forEach(item2 => {
+                result[item1.paymentMethod].push({
+                    label: item2.paymentInstrument,
+                    value: item2.paymentInstrument
+                });
+            });
+        });
+        return result;
+    }
+
+    // Helper method to prepare the Payment Instrument options
+    preparePaymentInstrumentOptions(paymentMethod) {
+        return this.paymentInstrumentMap[paymentMethod] || []; 
+    }
+
+    // Helper to prepare the Payment Instrument Detail Map
+    preparePaymentInstrumentDetailMap(data) {
+        let result = {};
+        data.forEach(item1 => {
+            item1.paymentInstrument.forEach(item2 => {
+                result[item2.paymentInstrument] = [];
+                item2.paymentInstrumentDetail.forEach(val => {
+                    result[item2.paymentInstrument].push({
+                        label: val,
+                        value: val
+                    });
+                });
+            });
+        });
+        return result;
+    }
+
+    // Helper method to prepare the Payment Instrument Detail options
+    preparePaymentInstrumentDetailOptions(paymentInstrument) {
+        return this.paymentInstrumentDetailMap[paymentInstrument] || []; 
+    }
+    /******************************************* Helper Methods - End *******************************************/
     
 }

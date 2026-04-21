@@ -68,7 +68,7 @@ export default class TransactionRecords extends LightningElement {
     @track visibleData = [];
     
     pageNo;
-    pageSize = 20;
+    pageSize = 10;
     totalPages;
 
     isLoading = false;
@@ -142,9 +142,18 @@ export default class TransactionRecords extends LightningElement {
         else {
             const result = await EditTransactionModal.open({
                 label: 'Edit Transaction',
-                size: 'small',
+                size: 'large',
                 recordId: rowId
             });
+            if(result){
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Record Updation',
+                    message: result === 'success' ? 'Record Updation successful!!!' : 'Record Updation un-successful!!!',
+                    variant: result === 'success' ? 'success' : 'error'
+                })
+            );
+        }
             this.isLoading = true;
             this.getRecords();
         }

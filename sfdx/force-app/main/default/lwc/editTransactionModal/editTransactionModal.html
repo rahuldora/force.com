@@ -1,113 +1,35 @@
 <template>
     
-    <lightning-card icon-name="utility:inspector_panelq" variant="base">
-        <div slot="title">
-            Transaction Record
-        </div>
-        <!-- <div slot="actions">
-        </div> -->
-        <div slot="footer">
-            
-                <lightning-button variant="brand" label="Update" onclick={handleUpdate}></lightning-button>
-                &nbsp;
-                <lightning-button variant="brand" label="Cancel" onclick={handleCancel}></lightning-button>
-            
-        </div>
-        <div>
-            <!-- Card Body  -->
-            <template if:true={isLoading}>
-                <lightning-spinner alternative-text="Loading" size="large" variant="base"></lightning-spinner>
-            </template>
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Transaction Date
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-input type="Date" name="Transaction_Date__c" value={record.Transaction_Date__c} required variant="label-hidden" onchange={changeHandler}></lightning-input>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Amount
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-input type="number" name="Amount__c" formatter="currency" step="0.01" value={record.Amount__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Description
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-input type="text" name="Description__c" value={record.Description__c} required variant="label-hidden"  onchange={changeHandler}></lightning-input>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Transaction Type
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-combobox name="Transaction_Type__c" options={txnTypeOptions} variant="label-hidden" value={record.Transaction_Type__c}  onchange={changeHandler}></lightning-combobox>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Category
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-combobox name="Category__c" options={categoryOptions} variant="label-hidden" value={record.Category__c}  onchange={changeHandler}></lightning-combobox>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Payment Method
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-combobox name="Payment_Method__c" options={paymentMethodOptions} variant="label-hidden" value={record.Payment_Method__c}  onchange={changeHandler}></lightning-combobox>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Payment Instrument
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-combobox name="Payment_Instrument__c" options={paymentInstrumentOptions} variant="label-hidden" value={record.Payment_Instrument__c}  onchange={changeHandler}></lightning-combobox>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
-            <lightning-layout multiple-rows>
-                <lightning-layout-item size="2"></lightning-layout-item>
-                <lightning-layout-item size="3">
-                    Payment Instrument Detail
-                </lightning-layout-item>
-                <lightning-layout-item size="5">
-                    <lightning-combobox name="Payment_Instrument_Detail__c" options={paymentInstrumentDetailOptions} variant="label-hidden" value={record.Payment_Instrument_Detail__c}  onchange={changeHandler}></lightning-combobox>
-                </lightning-layout-item>
-                <lightning-layout-item size="2"></lightning-layout-item>
-            </lightning-layout>
-            
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="small" variant="brand"></lightning-spinner>
+    </template>
+    <template if:false={isLoading}>
 
+        <div class="container">
+            <div class="card">
+
+                <div class="header">Edit Transaction</div>
+                
+                <div class="grid">
+                    <lightning-input label="Transaction Date" variant="label-inline" type="date" name="Transaction_Date__c" value={record.Transaction_Date__c} onchange={handleChange} required></lightning-input>
+                    <lightning-input label="Description" variant="label-inline" type="text" name="Description__c" value={record.Description__c} onchange={handleChange} required></lightning-input>
+                    <lightning-input label="Amount" variant="label-inline" type="number" name="Amount__c" step="0.01" value={record.Amount__c} onchange={handleChange} required></lightning-input>
+                    <lightning-combobox label="Payment Method" variant="label-inline" name="Payment_Method__c" value={record.Payment_Method__c} options={paymentMethodOptions} onchange={handleChange} required></lightning-combobox>
+                    <lightning-combobox label="Type" variant="label-inline" name="Transaction_Type__c" value={record.Transaction_Type__c} options={txnTypeOptions} onchange={handleChange} required></lightning-combobox>
+                    <lightning-combobox label="Payment Instrument" variant="label-inline" name="Payment_Instrument__c" value={record.Payment_Instrument__c} options={paymentInstrumentOptions} onchange={handleChange} required></lightning-combobox>
+                    <lightning-combobox label="Category" variant="label-inline" name="Category__c" value={record.Category__c} options={categoryOptions} onchange={handleChange} required></lightning-combobox>
+                    <lightning-combobox label="Payment Instrument Detail" variant="label-inline" name="Payment_Instrument_Detail__c" value={record.Payment_Instrument_Detail__c} options={paymentInstrumentDetailOptions} onchange={handleChange} required></lightning-combobox>
+                </div>
+
+                <div class="slds-align_absolute-center">
+                    <lightning-button name="update" variant="brand" label="Update" onclick={handleClick}></lightning-button>
+                    &nbsp;&nbsp;
+                    <lightning-button name="cancel" variant="brand" label="Cancel" onclick={handleClick}></lightning-button>
+                </div>
+
+            </div>
         </div>
-    </lightning-card>
+
+    </template>
 
 </template>
