@@ -124,7 +124,7 @@ export default class TransactionRecords extends LightningElement {
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Success',
-                        message: 'Transaction deleted!!!',
+                        message: 'Transaction record deleted successfully!!!',
                         variant: 'success'
                     })
                 );
@@ -138,6 +138,8 @@ export default class TransactionRecords extends LightningElement {
                     })
                 );
             }
+            this.isLoading = true;
+            this.getRecords();
         }
         else {
             const result = await EditTransactionModal.open({
@@ -146,14 +148,14 @@ export default class TransactionRecords extends LightningElement {
                 recordId: rowId
             });
             if(result){
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Record Updation',
-                    message: result === 'success' ? 'Record Updation successful!!!' : 'Record Updation un-successful!!!',
-                    variant: result === 'success' ? 'success' : 'error'
-                })
-            );
-        }
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Record Updation',
+                        message: result === 'success' ? 'Record Updation successful!!!' : 'Record Updation un-successful!!!',
+                        variant: result === 'success' ? 'success' : 'error'
+                    })
+                );
+            }
             this.isLoading = true;
             this.getRecords();
         }

@@ -19,5 +19,10 @@ public with sharing class FinancialTransactionsPageController {
     public static String getPaymentMethodDependentOptions(){
         return FinancialTransactionService.getPaymentMethodDependentOptions();
     }
+
+    @AuraEnabled
+    public static string createRecords(List<Financial_Transaction__c> records){
+        return FinancialTransactionService.createRecords(records);
+    }
     
 }

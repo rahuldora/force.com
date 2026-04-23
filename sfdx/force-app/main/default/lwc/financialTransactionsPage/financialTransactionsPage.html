@@ -17,12 +17,25 @@
                         <th>
                             <lightning-combobox name="year" value={planner.year} options={yearOptions} onchange={handleAction}></lightning-combobox>
                         </th>
+                        <th>
+                            &nbsp;
+                        </th>
+                        <th>
+                            
+                        </th>
                     </tr>
                 </thead>
             </table>
         </div>
-        <!-- <div slot="footer">
-        </div> -->
+        <div slot="footer">
+            <div class="slds-align_absolute-center">
+                <lightning-button 
+                    variant="brand"
+                    label="New" 
+                    onclick={handleClick} 
+                ></lightning-button>
+            </div>
+        </div>
         <div>
             <!-- Card Body  -->
             <lightning-tabset variant="scoped">

@@ -1,5 +1,9 @@
 import { LightningElement, track } from 'lwc';
 
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
+import NewTransactionModal from 'c/newTransactionModal';
+
 export default class FinancialTransactionsPage extends LightningElement {
 
     @track planner = {
@@ -60,6 +64,30 @@ export default class FinancialTransactionsPage extends LightningElement {
         children.forEach(child => {
             child.month = this.planner.month;
             child.year = this.planner.year;
+            child.getRecords();
+        });
+    }
+
+    async handleClick() {
+        const result = await NewTransactionModal.open({
+            label: 'New Transactions',
+            size: 'large'
+        });
+        if (result){
+            const message = (result === 'success') ? 
+            'Records were created successfully!' :
+            'Record creation failed due to some error. Please try again!';
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Record Creation Status',
+                    message: message,
+                    variant: result
+                })
+            );
+        }
+        // Calling the child components method
+        const children = this.template.querySelectorAll('c-transaction-records');
+        children.forEach(child => {
             child.getRecords();
         });
     }

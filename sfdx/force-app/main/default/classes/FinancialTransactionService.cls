@@ -136,5 +136,27 @@ public with sharing class FinancialTransactionService {
         return result;
 
     }
+
+    public static String createRecords(List<Financial_Transaction__c> txnRecords) {
+
+        String successFlag = 'success';
+
+        // Create a Unit Of Work
+        fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(
+            new Schema.SObjectType[] {
+                Financial_Transaction__c.SObjectType
+            }
+        );
+        uow.registerNew(txnRecords);
+        try {
+            // Commit the work
+            uow.commitWork();
+        }
+        catch(Exception e) {
+            successFlag = 'error';
+        }
+        return successFlag;
+
+    }
     
 }

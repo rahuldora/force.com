@@ -1,0 +1,209 @@
+<template>
+
+    <div>
+
+        <lightning-card icon-name="utility:billing" variant="base">
+            
+            <h2 slot="title">
+                New Transaction
+            </h2>
+            
+            <!-- <div slot="actions">
+            </div> -->
+            
+            <div slot="footer">
+                <div class="slds-align_absolute-center">
+                    <lightning-button 
+                        name="create"
+                        variant="success" 
+                        icon-name="action:new_task" 
+                        title="Create" 
+                        onclick={handleClick} 
+                        class="slds-button__icon_left" 
+                        label="Create Records"
+                    ></lightning-button>
+                    &nbsp;
+                    <lightning-button 
+                        name="add_rows"
+                        variant="brand" 
+                        icon-name="utility:add" 
+                        title="Add Rows" 
+                        onclick={handleClick} 
+                        class="slds-button__icon_left" 
+                        label="Add Rows"
+                    ></lightning-button>
+                    &nbsp;
+                    <lightning-button 
+                        name="close"
+                        variant="destructive" 
+                        icon-name="action:close" 
+                        title="Cancel" 
+                        onclick={handleClick} 
+                        class="slds-button__icon_left" 
+                        label="Close"
+                    ></lightning-button>
+                </div>
+            </div>
+            
+            <div>
+                
+                <!-- Card Body  -->
+                <template if:true={isLoading}>
+                    <lightning-spinner 
+                        alternative-text="Loading" 
+                        size="medium"
+                        variant="brand"
+                    ></lightning-spinner>
+                </template>
+                <template if:false={isLoading}>
+
+                    <form class="slds-p-around_medium slds-card">
+                        <table>
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th>
+                                        <div class="slds-align_absolute-center">Date</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Amount (in ₹)</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Description</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Type</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Category</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Payment Method</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Payment Instrument</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">Detail</div>
+                                    </th>
+                                    <th>
+                                        <div class="slds-align_absolute-center">&nbsp;</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={records} for:item="record">
+                                    <tr key={record.index}>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-input 
+                                                    type="date" 
+                                                    name="Transaction_Date__c" 
+                                                    value={record.Transaction_Date__c} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-input 
+                                                    type="number" 
+                                                    name="Amount__c" 
+                                                    step="0.01" 
+                                                    value={record.Amount__c} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-input 
+                                                    type="text" 
+                                                    name="Description__c" 
+                                                    value={record.Description__c} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-input>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-combobox 
+                                                    name="Transaction_Type__c" 
+                                                    value={record.Transaction_Type__c} 
+                                                    options={txnTypeOptions} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-combobox>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-combobox 
+                                                    name="Category__c" 
+                                                    value={record.Category__c} 
+                                                    options={record.categoryOptions} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-combobox>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-combobox 
+                                                    name="Payment_Method__c" 
+                                                    value={record.Payment_Method__c} 
+                                                    options={paymentMethodOptions} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-combobox>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-combobox 
+                                                    name="Payment_Instrument__c" 
+                                                    value={record.Payment_Instrument__c} 
+                                                    options={record.paymentInstrumentOptions} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-combobox>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-pill">
+                                                <lightning-combobox 
+                                                    name="Payment_Instrument_Detail__c" 
+                                                    value={record.Payment_Instrument_Detail__c} 
+                                                    options={record.paymentInstrumentDetailOptions} 
+                                                    onchange={handleChange}
+                                                    data-index={record.index}
+                                                ></lightning-combobox>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <lightning-button-icon 
+                                                name="remove_row"
+                                                variant="bare" 
+                                                icon-name="utility:delete" 
+                                                onclick={handleClick} 
+                                                class="slds-m-left_small" 
+                                                data-index={record.index}
+                                            ></lightning-button-icon>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </form>
+
+                 </template>
+
+            </div>
+
+        </lightning-card>
+        
+    </div>
+    
+</template>
