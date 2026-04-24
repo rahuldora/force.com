@@ -14,6 +14,12 @@ public with sharing class CreditCardSelector extends fflib_SObjectSelector {
         };
     }
 
+    /**
+     * @name        : getCreditCards
+     * @param       : null 
+     * @return      : List of Credit_Card__c
+     * @description : Method that fetches the list of all Credit_Card__c
+     */
     public List<Credit_Card__c> getCreditCards() {
         return (List<Credit_Card__c>) Database.query(
             newQueryFactory()
@@ -21,6 +27,12 @@ public with sharing class CreditCardSelector extends fflib_SObjectSelector {
         );
     }
 
+    /**
+     * @name        : getCreditCards
+     * @param       : recordId => Id of Credit_Card__c 
+     * @return      : Credit_Card__c record
+     * @description : Method that fetches the Credit_Card__c record for the specified recordId
+     */
     public Credit_Card__c getCreditCardById(Id recordId) {
         return (Credit_Card__c) Database.query(
             newQueryFactory()

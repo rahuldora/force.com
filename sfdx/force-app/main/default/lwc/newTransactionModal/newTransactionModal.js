@@ -1,29 +1,25 @@
 import { api, track, wire } from 'lwc';
 
 import LightningModal from 'lightning/modal';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 
 import TXN_OBJECT from '@salesforce/schema/Financial_Transaction__c';
-import AMOUNT_FIELD from '@salesforce/schema/Financial_Transaction__c.Amount__c';
 import CATEGORY_FIELD from '@salesforce/schema/Financial_Transaction__c.Category__c';
-import DESCRIPTION_FIELD from '@salesforce/schema/Financial_Transaction__c.Description__c';
-import PAYMENT_INSTRUMENT_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Instrument__c';
-import PAYMENT_INSTRUMENT_DETAIL_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Instrument_Detail__c';
-import PAYMENT_METHOD_FIELD from '@salesforce/schema/Financial_Transaction__c.Payment_Method__c';
-import TRANSACTION_DATE_FIELD from '@salesforce/schema/Financial_Transaction__c.Transaction_Date__c';
-import TRANSACTION_TYPE_FIELD from '@salesforce/schema/Financial_Transaction__c.Transaction_Type__c';
 
 import getPaymentMethodDependentOptions from '@salesforce/apex/FinancialTransactionsPageController.getPaymentMethodDependentOptions';
 import createRecords from '@salesforce/apex/FinancialTransactionsPageController.createRecords';
+
 export default class NewTransactionModal extends LightningModal {
 
+    // Variable to capture the record details for creation
     @track records = [];
-
-    counter;
 
     // Flag variable to display the spinner when required
     isLoading;
-
+    // Counter variable for assigning the index value for each records
+    counter;
+    // Variable to capture the default recordtype of Financial_Transaction__c 
     txnRecordTypeId;
 
     // Map variables to store the dependent picklist values
@@ -31,18 +27,10 @@ export default class NewTransactionModal extends LightningModal {
     paymentInstrumentMap = {}; // Payment Instrument => dependent on => Payment Method
     paymentInstrumentDetailMap = {}; // Payment Instrument Detail => dependent on => Payment Instrument
 
-    // Option Variables
-    // txnTypeOptions = [];
-    // paymentMethodOptions = [];
-    // @track categoryOptions = [];
-    // @track paymentInstrumentOptions = []
-    // @track paymentInstrumentDetailOptions = [];
-
     // Flag variables to detect whether all the component values are loaded
     isObjectLoaded = false;
     isCategoryPicklistLoaded = false;
     isPaymentPicklistLoaded = false;
-    isRecordLoaded = false;
 
     /******************************************* Wire Methods - Start *******************************************/
     // wire method to fetch the default recordType Id of Financial_Transaction__c
@@ -336,7 +324,14 @@ export default class NewTransactionModal extends LightningModal {
     createRecords() {
         this.isLoading = true;
         if(this.checkforEmptyDetails()) {
-            alert('Please fill all the details to submit for record creation!');
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Record Creation',
+                    message: 'Please fill all the details to submit for record creation!',
+                    variant: 'info'
+                })
+            );
+            // alert('Please fill all the details to submit for record creation!');
             this.isLoading = false;
             return;
         }

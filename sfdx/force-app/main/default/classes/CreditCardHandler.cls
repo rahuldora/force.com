@@ -2,6 +2,12 @@ public with sharing class CreditCardHandler extends fflib_SObjectDomain {
     
     public static Set<Credit_Card__c> cardsToBeNotified;
     
+    /**
+     * @name        : CreditCardHandler (Constructor)
+     * @param       : sObjectList => List of Credit_Card__c records
+     * @return      : null
+     * @description : constructor method
+     */
     public CreditCardHandler(List<Credit_Card__c> sObjectList) {
 
         // Domain classes are initialised with lists to enforce bulkification throughout
@@ -10,6 +16,12 @@ public with sharing class CreditCardHandler extends fflib_SObjectDomain {
 
     }
 
+    /**
+     * @name        : Constructor
+     * @param       : sObjectList => List of Credit_Card__c records
+     * @return      : null
+     * @description : Constructor class to invoke the constructor method when initialised dynamically
+     */
     public class Constructor implements fflib_SObjectDomain.IConstructable {
 
 		public fflib_SObjectDomain construct(List<SObject> sObjectList) {
@@ -18,7 +30,12 @@ public with sharing class CreditCardHandler extends fflib_SObjectDomain {
 
 	}
 
-    // afterInsert Logic
+    /**
+     * @name        : onAfterInsert
+     * @param       : null
+     * @return      : null
+     * @description : method is invoked to perform afterInsert Logic
+     */
     public override void onAfterInsert() {
         
         // need to check whether the existing balance is less than minimum balance
@@ -33,7 +50,12 @@ public with sharing class CreditCardHandler extends fflib_SObjectDomain {
         
     }
     
-    // afterUpdate Logic
+    /**
+     * @name        : onAfterUpdate
+     * @param       : existing => Map<Id, SObject> containing the map of old Credit_Card__c records
+     * @return      : null
+     * @description : method is invoked to perform afterUpdate Logic
+     */
     public override void onAfterUpdate(Map<Id, SObject> existing) {
         
         // Map of Old Credit_Card__c records
@@ -51,7 +73,12 @@ public with sharing class CreditCardHandler extends fflib_SObjectDomain {
         
     }
     
-    // afterUndelete Logic
+    /**
+     * @name        : onAfterUndelete
+     * @param       : null
+     * @return      : null
+     * @description : method is invoked to perform afterUndelete Logic
+     */
     public override void onAfterUndelete() {
         
         // need to check whether the existing balance is less than minimum balance
@@ -66,7 +93,12 @@ public with sharing class CreditCardHandler extends fflib_SObjectDomain {
         
     }
     
-    // method for creating the notifications
+    /**
+     * @name        : createCustomNotifications
+     * @param       : null
+     * @return      : null
+     * @description : method for creating and dispatching the notifications
+     */
     public static void createCustomNotifications() {
         
         // Setting up the custom notification

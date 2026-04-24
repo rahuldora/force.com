@@ -2,6 +2,12 @@ public without sharing class CreditCardPaymentProcessor implements PaymentProces
     
     private Map<String, Credit_Card__c> cardMap;
     
+    /**
+     * @name        : CreditCardPaymentProcessor (Constructor)
+     * @param       : null
+     * @return      : null
+     * @description : constructor method
+     */
     public CreditCardPaymentProcessor() {
 
         // Initialising the Card Map
@@ -18,6 +24,13 @@ public without sharing class CreditCardPaymentProcessor implements PaymentProces
 
     }
 
+    /**
+     * @name        : recordInsertion
+     * @param       : txnRecords => List of Financial_Transaction__c to be processed
+     *                insertFlag => true for insert, false for delete
+     * @return      : null
+     * @description : Method that processes the record Insertion if the payment method is Credit Card
+     */
     public void recordInsertion(List<Financial_Transaction__c> txnRecords, boolean insertFlag) {
 
         fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(

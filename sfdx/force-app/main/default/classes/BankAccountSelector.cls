@@ -15,6 +15,12 @@ public with sharing class BankAccountSelector extends fflib_SObjectSelector {
         };
     }
 
+    /**
+     * @name        : getBankAccounts
+     * @param       : null
+     * @return      : List<Bank_Account__c> => Returns the List of Bank_Account__c
+     * @description : Method that returns the List of Bank Account details present in the org
+     */
     public List<Bank_Account__c> getBankAccounts() {
         return (List<Bank_Account__c>) Database.query(
             newQueryFactory()
@@ -22,6 +28,12 @@ public with sharing class BankAccountSelector extends fflib_SObjectSelector {
         );
     }
 
+    /**
+     * @name        : getBankAccountById
+     * @param       : recordId => Id of the Bank_Account__c
+     * @return      : Bank_Account__c => Returns the Bank_Account__c record
+     * @description : Method that returns the Bank Account details for the provided recordId
+     */
     public Bank_Account__c getBankAccountById(Id recordId) {
         return (Bank_Account__c) Database.query(
             newQueryFactory()

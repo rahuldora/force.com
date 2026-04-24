@@ -1,23 +1,35 @@
 <template>
     
-    <lightning-tabset variant="vertical">
-        
-        <lightning-tab label="Financial Transactions">
-            <c-financial-transactions-page></c-financial-transactions-page>
-        </lightning-tab>
-        
-        <lightning-tab label="Bank Accounts">
-            <c-bank-accounts-page></c-bank-accounts-page>
-        </lightning-tab>
+    <template if:true={isLoading}>
+        <lightning-spinner 
+            alternative-text="Loading" 
+            size="medium"
+            variant="brand"
+        ></lightning-spinner>
+    </template>
 
-        <lightning-tab label="Credit Cards">
-            <c-credit-cards-page></c-credit-cards-page>
-        </lightning-tab>
+    <template if:false={isLoading}>
 
-        <lightning-tab label="Budget Tracker & Analytics">
-            <c-monthly-trackers-page></c-monthly-trackers-page>
-        </lightning-tab>
+        <lightning-tabset variant="vertical">
+            
+            <lightning-tab label="Financial Transactions">
+                <c-financial-transactions-page></c-financial-transactions-page>
+            </lightning-tab>
+            
+            <lightning-tab label="Bank Accounts">
+                <c-bank-accounts-page></c-bank-accounts-page>
+            </lightning-tab>
+    
+            <lightning-tab label="Credit Cards">
+                <c-credit-cards-page></c-credit-cards-page>
+            </lightning-tab>
+    
+            <lightning-tab label="Budget Tracker &amp; Analytics">
+                <c-monthly-trackers-page></c-monthly-trackers-page>
+            </lightning-tab>
+    
+        </lightning-tabset>
 
-    </lightning-tabset>
+    </template>
 
 </template>
