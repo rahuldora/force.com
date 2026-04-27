@@ -6,6 +6,12 @@ public without sharing class PaymentProcessorFactory {
         'Cash' => new CashPaymentProcessor()
     };
 
+    /**
+     * @name        : getProcessor
+     * @param       : String => Payment method value
+     * @return      : PaymentProcessor => returns the PaymentProcessor class type based on the Payment method passed
+     * @description : method to return the PaymentProcessor class type based on the Payment method passed
+     */
     public static PaymentProcessor getProcessor(String paymentMethod) {
         return processorMap.get(paymentMethod);
     }

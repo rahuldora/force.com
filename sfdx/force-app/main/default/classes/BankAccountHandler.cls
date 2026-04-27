@@ -2,6 +2,12 @@ public with sharing class BankAccountHandler extends fflib_SObjectDomain {
     
     public static Set<Bank_Account__c> bankAccountsToBeNotified;
     
+    /**
+     * @name        : BankAccountHandler (Constructor)
+     * @param       : sObjectList => List of Bank_Account__c records
+     * @return      : null
+     * @description : constructor method
+     */
     public BankAccountHandler(List<Bank_Account__c> sObjectList) {
 
         // Domain classes are initialised with lists to enforce bulkification throughout
@@ -10,6 +16,12 @@ public with sharing class BankAccountHandler extends fflib_SObjectDomain {
 
     }
 
+    /**
+     * @name        : Constructor
+     * @param       : sObjectList => List of Bank_Account__c records
+     * @return      : null
+     * @description : Constructor class to invoke the constructor method when initialised dynamically
+     */
     public class Constructor implements fflib_SObjectDomain.IConstructable {
 
 		public fflib_SObjectDomain construct(List<SObject> sObjectList) {
@@ -18,7 +30,12 @@ public with sharing class BankAccountHandler extends fflib_SObjectDomain {
 
 	}
 
-    // afterInsert Logic
+    /**
+     * @name        : onAfterInsert
+     * @param       : null
+     * @return      : null
+     * @description : Method for afterInsert Logic
+     */
     public override void onAfterInsert() {
         
         // need to check whether the existing balance is less than minimum balance
@@ -33,7 +50,12 @@ public with sharing class BankAccountHandler extends fflib_SObjectDomain {
         
     }
     
-    // afterUpdate Logic
+    /**
+     * @name        : onAfterInsert
+     * @param       : existing => Map<Id, Bank_Account__c>
+     * @return      : null
+     * @description : Method for afterUpdate Logic
+     */
     public override void onAfterUpdate(Map<Id, SObject> existing) {
         
         // Map of Old Bank_Account__c records
@@ -51,7 +73,12 @@ public with sharing class BankAccountHandler extends fflib_SObjectDomain {
         
     }
     
-    // afterUndelete Logic
+    /**
+     * @name        : onAfterUndelete
+     * @param       : null
+     * @return      : null
+     * @description : Method for afterUndelete Logic
+     */
     public override void onAfterUndelete() {
         
         // need to check whether the existing balance is less than minimum balance
@@ -66,7 +93,12 @@ public with sharing class BankAccountHandler extends fflib_SObjectDomain {
         
     }
 
-    // method for creating the notifications
+    /**
+     * @name        : createCustomNotifications
+     * @param       : null
+     * @return      : null
+     * @description : method for creating and dispatching the notifications
+     */
     public static void createCustomNotifications() {
         
         // Setting up the custom notification

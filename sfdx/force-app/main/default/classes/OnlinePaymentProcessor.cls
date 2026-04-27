@@ -3,6 +3,12 @@ public with sharing class OnlinePaymentProcessor implements PaymentProcessor {
     private Map<String, Bank_Account__c> bankMap;
     private Map<String, Credit_Card__c> cardMap;
     
+    /**
+     * @name        : OnlinePaymentProcessor
+     * @param       : null
+     * @return      : null
+     * @description : constructor method
+     */
     public OnlinePaymentProcessor() {
 
         // Initialising the bankMap
@@ -32,6 +38,13 @@ public with sharing class OnlinePaymentProcessor implements PaymentProcessor {
 
     }
 
+    /**
+     * @name        : recordInsertion
+     * @param       : List<Financial_Transaction__c> => List of Financial_Transaction__c records
+     *              : boolean
+     * @return      : null
+     * @description : method to process the record insertion of Financial_Transaction__c records whose payment type is "Online"
+     */
     public void recordInsertion(List<Financial_Transaction__c> txnRecords, boolean insertFlag) {
 
         if (txnRecords == null || txnRecords.isEmpty()) { return; }
@@ -43,6 +56,12 @@ public with sharing class OnlinePaymentProcessor implements PaymentProcessor {
 
     }
 
+    /**
+     * @name        : initializeUnitOfWork
+     * @param       : null
+     * @return      : fflib_SObjectUnitOfWork => returns the fflib_SObjectUnitOfWork object 
+     * @description : method to initialize the fflib_SObjectUnitOfWork object
+     */
     private fflib_SObjectUnitOfWork initializeUnitOfWork() {
         
         return new fflib_SObjectUnitOfWork(
@@ -54,6 +73,14 @@ public with sharing class OnlinePaymentProcessor implements PaymentProcessor {
 
     }
 
+    /**
+     * @name        : processTransaction
+     * @param       : Financial_Transaction__c => Financial_Transaction__c record
+     *              : boolean => flag variable to process insertion when true & to process deletion when false
+     *              : fflib_SObjectUnitOfWork => Object to implement Unit of work
+     * @return      : null
+     * @description : method to process the Financial_Transaction__c record
+     */
     private void processTransaction(Financial_Transaction__c txn, boolean insertFlag, fflib_SObjectUnitOfWork uow) {
         
         if(txn.Transaction_Type__c == 'Income') {
@@ -65,6 +92,14 @@ public with sharing class OnlinePaymentProcessor implements PaymentProcessor {
 
     }
 
+    /**
+     * @name        : processIncomeTransaction
+     * @param       : Financial_Transaction__c => Financial_Transaction__c record
+     *              : boolean => flag variable to process insertion when true & to process deletion when false
+     *              : fflib_SObjectUnitOfWork => Object to implement Unit of work
+     * @return      : null
+     * @description : method to process the Financial_Transaction__c record whose transaction type is "Income"
+     */
     private void processIncomeTransaction(Financial_Transaction__c txn, boolean insertFlag, fflib_SObjectUnitOfWork uow) {
         
         Bank_Account__c bankAccount = this.bankMap.get(txn.Payment_Instrument_Detail__c);
@@ -75,6 +110,14 @@ public with sharing class OnlinePaymentProcessor implements PaymentProcessor {
     
     }
 
+    /**
+     * @name        : processExpenseTransaction
+     * @param       : Financial_Transaction__c => Financial_Transaction__c record
+     *              : boolean => flag variable to process insertion when true & to process deletion when false
+     *              : fflib_SObjectUnitOfWork => Object to implement Unit of work
+     * @return      : null
+     * @description : method to process the Financial_Transaction__c record whose transaction type is "Expense" or "Savings"
+     */
     private void processExpenseTransaction(Financial_Transaction__c txn, boolean insertFlag, fflib_SObjectUnitOfWork uow) {
     
         // Card payment adjustments for credit card bill payments

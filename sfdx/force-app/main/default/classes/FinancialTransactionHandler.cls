@@ -9,6 +9,12 @@ public with sharing class FinancialTransactionHandler extends fflib_SObjectDomai
     // map variable containing payment_method to Object name
     private Map<String,String> paymentMap;
 
+    /**
+     * @name        : FinancialTransactionHandler
+     * @param       : List<Financial_Transaction__c> => List of Financial_Transaction__c records
+     * @return      : null
+     * @description : Constructor method
+     */
     public FinancialTransactionHandler(List<Financial_Transaction__c> sObjectList) {
 
         // Domain classes are initialised with lists to enforce bulkification throughout

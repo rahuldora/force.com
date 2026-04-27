@@ -56,6 +56,13 @@ public with sharing class MonthlyTrackerSelector extends fflib_SObjectSelector {
         };
     }
 
+    /**
+     * @name        : getTrackerRecord
+     * @param       : String => month value
+     *              : String => year value
+     * @return      : Monthly_Tracker__c => returns Monthly_Tracker__c record based on the month and year value
+     * @description : method to fetch the Monthly_Tracker__c record
+     */
     public Monthly_Tracker__c getTrackerRecord(String month, String year) {
 
         return (Monthly_Tracker__c) Database.query(

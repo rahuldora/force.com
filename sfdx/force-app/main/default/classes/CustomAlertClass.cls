@@ -2,6 +2,12 @@ public without sharing class CustomAlertClass {
     
     private Set<String> users;
 
+    /**
+     * @name        : CustomAlertClass (Constructor)
+     * @param       : null
+     * @return      : null
+     * @description : Constructor method
+     */
     public CustomAlertClass() {
 
         this.users = new Set<String>();
@@ -11,8 +17,16 @@ public without sharing class CustomAlertClass {
         
     }
 
+    /**
+     * @name        : sendNotification
+     * @param       : title => Title to be displayed in the notification
+     *              : message => Message to be displayed in the notification
+     *              : targetRecord => Target record's id
+     * @return      : null
+     * @description : Method to send the custom notification
+     */
     public void sendNotification(String title, String message, Id targetRecord) {
-
+        
         try{
             Messaging.CustomNotification notification = new Messaging.CustomNotification();
             notification.setNotificationTypeId(getCustomNotificationTypeId());
@@ -31,9 +45,15 @@ public without sharing class CustomAlertClass {
             System.debug('Error : '+e.getStackTraceString());
             return;
         }
-
+        
     }
-
+    
+    /**
+     * @name        : getCustomNotificationTypeId
+     * @param       : null
+     * @return      : Id => Id of the Custom Notification type Id
+     * @description : Method to fetch the Id of the custom notification type
+     */
     public Id getCustomNotificationTypeId() {
 
         fflib_QueryFactory qf = new fflib_QueryFactory(CustomNotificationType.SObjectType);
@@ -45,6 +65,12 @@ public without sharing class CustomAlertClass {
 
     }
 
+    /**
+     * @name        : getUserList
+     * @param       : null
+     * @return      : List<User> => List of users 
+     * @description : Method to fetch the list of users that are to be notified
+     */
     public List<User> getUserList() {
 
         fflib_QueryFactory qf = new fflib_QueryFactory(User.SObjectType);

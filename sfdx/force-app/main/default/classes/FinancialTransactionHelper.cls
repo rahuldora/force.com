@@ -1,7 +1,13 @@
 public with sharing class FinancialTransactionHelper {
     
+    /**
+     * @name        : prepareTrackerMap
+     * @param       : null
+     * @return      : Map<String, Monthly_Tracker__c> => Map that contains key as Month-Year for the respective monthly tracker record
+     * @description : method for creating the map of monthly tracker records
+     */
     public static Map<String, Monthly_Tracker__c> prepareTrackerMap() {
-
+        
         // result Map
         Map<String, Monthly_Tracker__c> resultMap = new Map<String, Monthly_Tracker__c>();
         // Querying the data
@@ -13,12 +19,18 @@ public with sharing class FinancialTransactionHelper {
             resultMap.put(tracker.Month__c+'-'+tracker.Year__c, tracker);
         }
         return resultMap;
-
+        
     }
-
-    // method to checking the need to create a new Monthly_Tracker__c record
+    
+    /**
+     * @name        : checkTrackersForCreation
+     * @param       : List<Financial_Transaction__c> => List of new transaction records
+     *              : Map<String, Monthly_Tracker__c> => trackerMap
+     * @return      : List<Monthly_Tracker__c> => List of tracker records to be created
+     * @description : method to checking the need to create a new Monthly_Tracker__c record
+     */
     public static List<Monthly_Tracker__c> checkTrackersForCreation(List<Financial_Transaction__c> newTransactionRecords, Map<String, Monthly_Tracker__c> trackerMap) {
-
+        
         String month;
         String year;
         List<Monthly_Tracker__c> trackersToBeCreated = new List<Monthly_Tracker__c>();
@@ -58,10 +70,15 @@ public with sharing class FinancialTransactionHelper {
             }
         }
         return trackersToBeCreated;
-
+        
     }
-
-    // method to create the tracker records
+        
+    /**
+     * @name        : checkTrackersForCreation
+     * @param       : List<Monthly_Tracker__c> => List of new tracker records to be created
+     * @return      : List<Monthly_Tracker__c> => List of newly created tracker records
+     * @description : method to create the tracker records
+     */
     public static List<Monthly_Tracker__c> createTrackers(List<Monthly_Tracker__c> trackersToBeCreated) {
 
         fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(
@@ -75,7 +92,13 @@ public with sharing class FinancialTransactionHelper {
 
     }
 
-    // method to map Monthly_Tracker__c to Financial_Transaction__c records
+    /**
+     * @name        : mapTrackerToRecords
+     * @param       : List<Financial_Transaction__c> => List of new transaction records
+     *              : Map<String, Monthly_Tracker__c> => tracker map
+     * @return      : null
+     * @description : method to map Monthly_Tracker__c to Financial_Transaction__c records
+     */
     public static void mapTrackerToRecords(List<Financial_Transaction__c> newTransactionRecords, Map<String, Monthly_Tracker__c> trackerMap) {
         
         String month;
@@ -100,7 +123,13 @@ public with sharing class FinancialTransactionHelper {
 
     }
 
-    // method to create the Payment Map
+    /**
+     * @name        : createPaymentTypeMap
+     * @param       : List<Financial_Transaction__c> => List of new transaction records
+     *              : Map<String, Monthly_Tracker__c> => tracker map
+     * @return      : Map<String, List<Financial_Transaction__c>> => Map to segregate Financial_Transaction__c based on the payment method
+     * @description : method to create the Payment Map
+     */
     public static Map<String, List<Financial_Transaction__c>> createPaymentTypeMap(List<Financial_Transaction__c> txnRecords) {
 
         Map<String, List<Financial_Transaction__c>> paymentTypeMap = new Map<String, List<Financial_Transaction__c>>();

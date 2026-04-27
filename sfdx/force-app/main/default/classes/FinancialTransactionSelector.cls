@@ -18,22 +18,36 @@ public with sharing class FinancialTransactionSelector extends fflib_SObjectSele
         };
     }
 
+    /**
+     * @name        : getRecordsByTxnType
+     * @param       : String => Transaction type
+     *              : Integer => Contains the month value
+     *              : Integer => Contains the year value
+     * @return      : List<Financial_Transaction__c> => List of Financial_Transaction__c records based on the parameters passed
+     * @description : method to fetch the Financial_Transaction__c records
+     */
     public List<Financial_Transaction__c> getRecordsByTxnType(String txnType, Integer month, Integer year) {
-
+        
         return (List<Financial_Transaction__c>) Database.query(
             newQueryFactory()
-                .setCondition(
-                    'Transaction_Type__c =:txnType ' + 
-                    'AND CALENDAR_MONTH(Transaction_Date__c) =:month ' +
-                    'AND CALENDAR_YEAR(Transaction_Date__c) =:year'
-                )
-                .addOrdering('Transaction_Date__c', fflib_QueryFactory.SortOrder.DESCENDING)
-                .addOrdering('CreatedDate', fflib_QueryFactory.SortOrder.ASCENDING)
-                .toSOQL()
+            .setCondition(
+                'Transaction_Type__c =:txnType ' + 
+                'AND CALENDAR_MONTH(Transaction_Date__c) =:month ' +
+                'AND CALENDAR_YEAR(Transaction_Date__c) =:year'
+            )
+            .addOrdering('Transaction_Date__c', fflib_QueryFactory.SortOrder.DESCENDING)
+            .addOrdering('CreatedDate', fflib_QueryFactory.SortOrder.ASCENDING)
+            .toSOQL()
         );
-
+            
     }
-
+            
+    /**
+     * @name        : getTransactionRecordById
+     * @param       : Id => record id of the Financial_Transaction__c
+     * @return      : Financial_Transaction__c => Financial_Transaction__c record based on the record id parameter passed
+     * @description : method to fetch the Financial_Transaction__c record
+     */
     public Financial_Transaction__c getTransactionRecordById(Id recordId) {
 
         return (Financial_Transaction__c) Database.query(

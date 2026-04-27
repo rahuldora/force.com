@@ -41,15 +41,17 @@ public without sharing class CreditCardPaymentProcessor implements PaymentProces
 
         for(Financial_Transaction__c txn : txnRecords) {
             Credit_Card__c card = cardMap.get(txn.Payment_Instrument_Detail__c);
-            try{
-                Decimal amt = (txn.Amount__c == null) ? 0 : txn.Amount__c;
-                // Preserve previous intended sign: insert -> increase the utilisation, else -> decrease
-                card.Amount_Utilised__c = card.Amount_Utilised__c + (insertFlag ? amt : -amt);
-                uow.registerDirty(card);
-            }
-            catch(Exception e) {}
+            Decimal amt = (txn.Amount__c == null) ? 0 : txn.Amount__c;
+            // Preserve previous intended sign: insert -> increase the utilisation, else -> decrease
+            card.Amount_Utilised__c = card.Amount_Utilised__c + (insertFlag ? amt : -amt);
+            uow.registerDirty(card);
         }
-        uow.commitWork();
+        try{
+            uow.commitWork();
+        }
+        catch(Exception e) {
+            System.debug('Error while processing the recordInsertion :: '+e);         
+        }
 
     }
 

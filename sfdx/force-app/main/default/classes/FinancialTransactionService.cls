@@ -1,5 +1,13 @@
 public with sharing class FinancialTransactionService {
     
+    /**
+     * @name        : getTransactionRecords
+     * @param       : String => Transaction type
+     *              : Integer => Contains the month value
+     *              : Integer => Contains the year value
+     * @return      : List<Financial_Transaction__c> => List of Financial_Transaction__c records based on the parameters passed
+     * @description : method to fetch the Financial_Transaction__c records
+     */
     public static List<Financial_Transaction__c> getTransactionRecords(String txnType, Integer month, Integer year) {
 
         FinancialTransactionSelector selector = new FinancialTransactionSelector();
@@ -7,6 +15,12 @@ public with sharing class FinancialTransactionService {
 
     }
     
+    /**
+     * @name        : getTransactionRecordById
+     * @param       : Id => record id of the Financial_Transaction__c
+     * @return      : Financial_Transaction__c => Financial_Transaction__c record based on the record id parameter passed
+     * @description : method to fetch the Financial_Transaction__c record
+     */
     public static Financial_Transaction__c getTransactionRecordById(Id recordId) {
 
         FinancialTransactionSelector selector = new FinancialTransactionSelector();
@@ -14,6 +28,12 @@ public with sharing class FinancialTransactionService {
 
     }
 
+    /**
+     * @name        : updateRecord
+     * @param       : Financial_Transaction__c => Financial_Transaction__c record that needs to be updated
+     * @return      : String => returns Successful on updation of the record, otherwise Failed
+     * @description : method to update the Financial_Transaction__c record
+     */
     public static String updateRecord(Financial_Transaction__c txn) {
 
         // Create a Unit Of Work
@@ -35,7 +55,12 @@ public with sharing class FinancialTransactionService {
 
     }
 
-    // wrapper class to contain the Payment_Method__c => Payment_Instrument__c => Payment_Instrument_Detail__c picklist value
+    /**
+     * @name        : PickListValueClass
+     * @description : Wrapper class to contain the 
+     *                Payment_Method__c => Payment_Instrument__c => Payment_Instrument_Detail__c 
+     *                picklist value
+     */
     public class PickListValueClass {
         List<PaymentMethod> records;
     }
@@ -48,6 +73,15 @@ public with sharing class FinancialTransactionService {
         List<String> paymentInstrumentDetail;
     }
 
+    /**
+     * @name        : getPaymentMethodDependentOptions
+     * @param       : null
+     * @return      : String => returns json string of the PickListValueClass wrapper class
+     *                          containing the Payment_Method__c => Payment_Instrument__c => Payment_Instrument_Detail__c 
+     *                          picklist value
+     * @description : method to fetch the Payment_Method__c => Payment_Instrument__c => Payment_Instrument_Detail__c 
+     *                picklist value
+     */
     public static String getPaymentMethodDependentOptions() {
 
         // Initialise the list PaymentMethod
@@ -108,6 +142,12 @@ public with sharing class FinancialTransactionService {
 
     }
 
+    /**
+     * @name        : getCreditCards
+     * @param       : null
+     * @return      : List<String> => returns list of credit card names
+     * @description : method to fetch the credit card names
+     */
     private static List<String> getCreditCards() {
 
         // Create a List of String for result
@@ -121,6 +161,12 @@ public with sharing class FinancialTransactionService {
 
     }
 
+    /**
+     * @name        : getBankAccounts
+     * @param       : null
+     * @return      : List<String> => returns list of Bank account names
+     * @description : method to fetch the bank account names
+     */
     private static List<String> getBankAccounts(String acctType) {
 
         // Create a List of String for result
@@ -137,6 +183,12 @@ public with sharing class FinancialTransactionService {
 
     }
 
+    /**
+     * @name        : createRecords
+     * @param       : List<Financial_Transaction__c> => List of transaction records
+     * @return      : String => returns success on creation of the record, otherwise error
+     * @description : method to create the transaction records provided
+     */
     public static String createRecords(List<Financial_Transaction__c> txnRecords) {
 
         String successFlag = 'success';
